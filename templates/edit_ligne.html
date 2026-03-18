@@ -1,0 +1,19 @@
+<h2>Modifier Ligne</h2>
+
+<form action="/update_ligne/{{ ligne[0] }}" method="POST">
+
+    Nom ligne :
+    <input type="text" name="nom" value="{{ ligne[1] }}"><br><br>
+
+    Départ :
+    <input type="text" name="depart" value="{{ ligne[2] }}"><br><br>
+
+    Arrivée :
+    <input type="text" name="arrive" value="{{ ligne[3] }}"><br><br>
+
+    <button type="submit">Modifier</button>
+
+</form>
+
+<br>
+<a href="/ligne">⬅ Retour</a>

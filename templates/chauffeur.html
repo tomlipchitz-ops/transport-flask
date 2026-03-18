@@ -1,0 +1,30 @@
+<h1>Liste des Chauffeurs</h1>
+
+
+
+<br><br>
+
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Actions</th>
+</tr>
+
+{% for c in chauffeur %}
+<tr>
+    <td>{{ c[0] }}</td>
+    <td>{{ c[1] }}</td>
+    <td>{{ c[2] }}</td>
+    <td>
+        <a href="/edit_chauffeur/{{ c[0] }}">Modifier</a>
+        <a href="/delete_chauffeur/{{ c[0] }}">Supprimer</a>
+        <a href="/add_chauffeur_page"> Ajouter </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/bus">⬅ Retour Bus</a>
