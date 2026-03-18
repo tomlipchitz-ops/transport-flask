@@ -1,0 +1,28 @@
+<h1>Liste des Bus</h1>
+
+
+<br>
+
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Immatriculation</th>
+    <th>Capacité</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+
+{% for b in bus %}
+<tr>
+    <td>{{ b[0] }}</td>
+    <td>{{ b[1] }}</td>
+    <td>{{ b[2] }}</td>
+    <td>{{ b[3] }}</td>
+    <td>
+        <a href="/edit_bus/{{ b[0] }}">Modifier</a>
+        <a href="/delete_bus/{{ b[0] }}">Supprimer</a>
+        <a href="/add_page"> Ajouter Bus</a>
+    </td>
+</tr>
+{% endfor %}
+</table>

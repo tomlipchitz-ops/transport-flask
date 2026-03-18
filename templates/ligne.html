@@ -1,0 +1,31 @@
+<h1>Liste des Lignes</h1>
+
+<a href="/add_ligne_page">➕ Ajouter Ligne</a>
+
+<br><br>
+
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Départ</th>
+    <th>Arrivée</th>
+    <th>Actions</th>
+</tr>
+
+{% for l in ligne %}
+<tr>
+    <td>{{ l[0] }}</td>
+    <td>{{ l[1] }}</td>
+    <td>{{ l[2] }}</td>
+    <td>{{ l[3] }}</td>
+    <td>
+        <a href="/edit_ligne/{{ l[0] }}">Modifier</a>
+        <a href="/delete_ligne/{{ l[0] }}">Supprimer</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/bus">⬅ Retour Bus</a>

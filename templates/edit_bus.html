@@ -1,0 +1,17 @@
+<h2>Modifier Bus</h2>
+
+<form action="/update_bus/{{ bus[0] }}" method="POST">
+    Immatriculation:
+    <input type="text" name="immatriculation" value="{{ bus[1] }}"><br><br>
+
+    Capacité:
+    <input type="number" name="capacite" value="{{ bus[2] }}"><br><br>
+
+    Status:
+    <input type="text" name="status" value="{{ bus[3] }}"><br><br>
+
+    <button type="submit">Modifier</button>
+</form>
+
+<br>
+<a href="/bus">⬅ Retour</a>
