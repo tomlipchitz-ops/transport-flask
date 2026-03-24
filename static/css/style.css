@@ -110,13 +110,14 @@ body {
 }
 
 .admin-links a:hover {
-    background: #ddd;
+    background: #ddd; -
 }
 
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 600px) {
     .card {
+
         margin: 10px;
     }
 
