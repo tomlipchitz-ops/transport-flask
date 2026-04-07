@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paiement</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/client_paiement.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+    <h2>💳 Confirmation de paiement</h2>
+
+    <p>Montant : <strong>5 MRU</strong></p>
+
+    <input type="text" id="numero" placeholder="Numéro Bankily (8 chiffres)">
+
+    <button onclick="payer()">Confirmer le paiement</button>
+
+    <p id="message"></p>
+
+    <a href="/client" class="retour">⬅ Retour</a>
+  </div>
+
+</div>
+
+ <script src="{{ url_for('static', filename='js/client_paiement.js') }}" defer></script>
+
+
+</body>
+</html>

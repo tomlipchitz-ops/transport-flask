@@ -1,25 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Admin</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<meta charset="UTF-8">
+<title>Tableau de bord Admin</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}" defer></script>
+
 </head>
 
 <body>
 
-<div class="header">Dashboard Admin</div>
+<div class="container">
 
-<div class="card">
-    <h3>Gestion du système</h3>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>LOGO</h2>
 
-    <div class="admin-links">
-        <a href="/bus">Gestion des Bus</a>
-        <a href="/ligne">Gestion des Lignes</a>
-        <a href="/chauffeur">Gestion des Chauffeurs</a>
-        <a href="/reservation">Réservations</a>
-    </div>
+        <ul>
+            <li class="active">Tableau de bord</li>
+            <li>Utilisateurs</li>
+            <li>Bus</li>
+            <li>Réservations</li>
+            <li>Paramètres</li>
+        </ul>
+
+        <a href="/logout" class="logout">Déconnexion</a>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <input type="text" placeholder="Rechercher...">
+            <div class="profile">Admin</div>
+        </div>
+
+        <!-- CARTES -->
+        <div class="cards">
+
+            <div class="card">
+                <h3>Clients</h3>
+                <p data-value="36159">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Réservations</h3>
+                <p data-value="3159">0</p>
+            </div>
+
+            <div class="card highlight">
+                <h3>Revenus</h3>
+                <p data-value="6159">0</p>
+            </div>
+
+        </div>
+
+        <!-- CONTENU -->
+        <div class="content">
+
+            <div class="chart">
+                <h3>Statistiques</h3>
+                <canvas id="chart"></canvas>
+            </div>
+
+            <div class="right">
+
+                <div class="box">
+                    <h3>Ventes</h3>
+                    <p>95K</p>
+                </div>
+
+                <div class="box">
+                    <h3>Trafic</h3>
+                    <p>45%</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 </html>

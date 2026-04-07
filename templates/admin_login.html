@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Login Admin</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <h2> Login</h2>
+
+    <form method="POST" action="/admin-login">
+
+        <input type="number" name="id" placeholder="Votre ID" required>
+
+        <input type="password" name="password" placeholder="Mot de passe" required>
+
+        <button type="submit">Connexion</button>
+
+    </form>
+
+    <p style="text-align:center; margin-top:10px;">
+        <a href="/">← Retour </a>
+    </p>
+
+</div>
+
+</body>
+</html>

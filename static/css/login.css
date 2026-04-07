@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    font-family: Arial;
+
+    background: linear-gradient(135deg, #0f4c75, #1dd1a1);
+
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* bouton retour */
+.back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    background: #004d40;
+    color: white;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+/* carte */
+.card {
+    background: #2b2f36;
+    padding: 30px;
+    border-radius: 15px;
+
+    width: 300px;
+    text-align: center;
+
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* tabs */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabs span {
+    color: #aaa;
+    cursor: pointer;
+}
+
+.tabs .active {
+    color: #00e676;
+    border-bottom: 2px solid #00e676;
+}
+
+/* inputs */
+input {
+    width: 93%;
+    padding: 10px;
+    margin: 10px 0;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #3a3f47;
+    color: white;
+}
+
+/* bouton */
+button {
+    width: 100%;
+    padding: 10px;
+
+    background: #00e676;
+    border: none;
+    border-radius: 8px;
+
+    font-weight: bold;
+    cursor: pointer;
+   margin-top:15px;
+}
+
+button:hover {
+    background: #00c853;
+}

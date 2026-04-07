@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Accueil</title>
+
+<style>
+
+/* ===== BODY ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+
+    background: url("{{ url_for('static', filename='bus.jpg') }}") no-repeat center center;
+    background-size: cover;
+
+    /* 🔥 amélioration image */
+    filter: brightness(1) contrast(1.2);
+}
+
+/* ===== OVERLAY ===== */
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 80px;
+}
+
+/* ===== CONTENU ===== */
+.content {
+    color: white;
+}
+
+/* ===== TITRE ===== */
+h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+/* ===== BOUTONS ===== */
+.btn {
+    display: block;
+    width: 220px;
+    padding: 12px;
+    margin: 10px 0;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+
+    background: #27ae60;
+    color: white;
+}
+
+/* hover */
+.btn:hover {
+    background: #1e8449;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <div class="content">
+
+        <h1>Transport Nouakchott</h1>
+
+        <a href="/login" class="btn"> Client</a>
+        <a href="/admin-login" class="btn">Administration</a>
+        <a href="/chauffeur-login" class="btn">Chauffeur</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

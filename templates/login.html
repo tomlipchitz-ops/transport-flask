@@ -1,60 +1,52 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Connexion</title>
+<meta charset="UTF-8">
+<title>Login / Signup</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+
 </head>
 
-<body class="login-body">
+<body>
 
-    <!-- Titre -->
-    <div class="login-title">
-        🚍 Transport Nouakchott
+<div class="card">
+
+    <div class="tabs">
+        <span onclick="showLogin()">Login</span>
+        <span onclick="showSignup()">Sign Up</span>
     </div>
 
-    <!-- Carte Login -->
-    <div class="login-card">
-        <h2>Connexion</h2>
+    <!-- LOGIN -->
+    <form id="loginForm" method="POST" action="/login">
 
-        <form method="POST">
+        <input type="text" id="loginTel" name="telephone" placeholder="Numéro" required maxlength="8">
+        <div id="loginError"></div>
 
-            <!-- Choix rôle -->
-            <select name="role" class="input" required>
-                <option value="">Choisir un rôle</option>
-                <option value="client">Client</option>
-                <option value="chauffeur">Chauffeur</option>
-                <option value="admin">Admin</option>
-            </select>
+        <input type="password" name="password" placeholder="Mot de passe" required>
 
-            <!-- Email -->
-            <input
-                type="email"
-                name="email"
-                placeholder="Adresse Email"
-                class="input"
-                required
-                >
+        <button type="submit">Connexion</button>
 
-            <!-- Mot de passe -->
-            <input
-                type="password"
-                name="password"
-                placeholder="Mot de passe"
-                class="input"
-                required
-            >
+    </form>
 
-            <!-- Bouton -->
-            <button class="btn">Se connecter</button>
+    <!-- SIGNUP -->
+    <form id="signupForm" method="POST" action="/signup" style="display:none;">
 
-        </form>
-    </div>
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="text" name="prenom" placeholder="Prénom" required>
 
-    <!-- JS -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <input type="text" id="signupTel" name="telephone" placeholder="Numéro" required maxlength="8">
+        <div id="signupError"></div>
+
+        <input type="password" name="password" placeholder="Mot de passe" required>
+
+        <button type="submit">Créer un compte</button>
+
+    </form>
+
+
+</div>
 
 </body>
 </html>
