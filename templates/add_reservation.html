@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter Réservation</title>
+
+    <!-- CSS externe -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_reservation.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2><i class="fa-solid fa-calendar-plus"></i> Nouvelle Réservation</h2>
+
+        <form method="POST" action="/add_reservation">
+
+            <div class="form-row">
+                <input type="text" name="nom" placeholder="Nom" required>
+                <input type="text" name="telephone" placeholder="Téléphone" required>
+            </div>
+
+            <div class="form-row">
+                <select name="ligne">
+                    <option value="L1">Ligne 1</option>
+                    <option value="L2">Ligne 2</option>
+                    <option value="L3">Ligne 3</option>
+                    <option value="L4">Ligne 4</option>
+                </select>
+
+                <input type="text" name="arret" placeholder="Arrêt" required>
+            </div>
+
+            <div class="form-row">
+                <input type="time" name="horaire" required>
+                <input type="number" name="nb_places" min="1" value="1">
+            </div>
+
+            <div class="form-row">
+                <select name="paiement">
+                    <option value="Espèces">Espèces</option>
+                    <option value="Mobile">Mobile</option>
+                    <option value="Carte">Carte</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

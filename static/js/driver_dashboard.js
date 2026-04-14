@@ -16,8 +16,7 @@ let horaire   = null;
 let depIdx    = null;
 let arrIdx    = null;
 let places    = 1;
-let payMode   = 'bankily';
-let fileOk    = false;
+let payMode   = 'Espèces';
 
 function addMin(h, m, delta) {
   let t = h * 60 + m + delta;
@@ -114,9 +113,8 @@ function changePlaces(d) {
 
 function setPay(m) {
   payMode = m;
-  document.getElementById('pm-b').classList.toggle('on',  m === 'bankily');
-  document.getElementById('pm-s').classList.toggle('on',  m === 'sedad');
-  document.getElementById('pm-sl').classList.toggle('on', m === 'selivi');
+  document.getElementById('pm-especes').classList.toggle('on', m === 'Espèces');
+  document.getElementById('pm-mobile').classList.toggle('on',  m === 'Mobile');
 }
 
 function fmtTel(el) {
@@ -124,17 +122,7 @@ function fmtTel(el) {
   el.value = v.replace(/(\d{2})(?=\d)/g,'$1 ').trim();
 }
 
-function onFile(inp) {
-  const file = inp.files[0];
-  if (!file) return;
-  document.getElementById('upload-zone').classList.add('has');
-  document.getElementById('upload-txt').textContent = file.name;
-  document.getElementById('upload-sub').textContent = 'Capture importee avec succes';
-  const prev = document.getElementById('preview');
-  prev.src = URL.createObjectURL(file);
-  prev.style.display = 'block';
-  fileOk = true;
-}
+
 
 function reserver() {
   if (!horaire)                          return alert('Choisissez une heure de depart.');
@@ -143,7 +131,6 @@ function reserver() {
   if (phone.length < 8)                  return alert('Entrez votre numero (8 chiffres).');
   const nomClient = document.getElementById('nom_client').value.trim();
   if (!nomClient)                        return alert('Veuillez entrer le nom du client.');
-  if (!fileOk)                           return alert('Importez la capture de paiement.');
 
   const ref   = 'TB-' + Math.random().toString(36).slice(2,7).toUpperCase();
   const today = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
@@ -151,7 +138,7 @@ function reserver() {
   const to    = stops[arrIdx].name;
   const dur   = Math.abs(stops[arrIdx].min - stops[depIdx].min);
   const total = places * PRIX;
-  const appli = payMode === 'bankily' ? 'Bankily' : payMode === 'sedad' ? 'Sedad' : 'Selivi';
+  const appli = payMode;
 
   fetch('/reservation/api/client_reserve', {
     method: 'POST',
@@ -191,23 +178,17 @@ function reserver() {
 function reset() {
   document.getElementById('ov').classList.remove('show');
   direction='aller'; stops=[...STOPS_BASE];
-  depIdx=null; arrIdx=null; horaire=null; places=1; payMode='bankily'; fileOk=false;
+  depIdx=null; arrIdx=null; horaire=null; places=1; payMode='Espèces';
   document.getElementById('d-a').classList.add('on');
   document.getElementById('d-r').classList.remove('on');
-  document.getElementById('pm-b').classList.add('on');
-  document.getElementById('pm-s').classList.remove('on');
-  document.getElementById('pm-sl').classList.remove('on');
+  document.getElementById('pm-especes').classList.add('on');
+  document.getElementById('pm-mobile').classList.remove('on');
   document.getElementById('places-num').textContent   = '1';
   document.getElementById('tarif-detail').textContent = '1 place x 20 MRU';
   document.getElementById('tarif-total').textContent  = '20 MRU';
   document.getElementById('pay-amount').textContent   = '20 MRU';
   document.getElementById('phone').value = '';
   document.getElementById('nom_client').value = '';
-  document.getElementById('file-inp').value = '';
-  document.getElementById('upload-zone').classList.remove('has');
-  document.getElementById('upload-txt').textContent = 'Importer la capture de paiement';
-  document.getElementById('upload-sub').textContent = 'JPG ou PNG — cliquez ici';
-  document.getElementById('preview').style.display  = 'none';
   document.getElementById('dur-row').classList.remove('show');
   renderStops(); renderHoraires();
 }

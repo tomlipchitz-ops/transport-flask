@@ -4,29 +4,27 @@
 <meta charset="UTF-8">
 <title>Login Chauffeur</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/chauffeur_login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 
 </head>
 
 <body>
 
+<a href="/" class="back">←</a>
+
 <div class="card">
 
-    <h2> Login</h2>
+    <h2 style="color: white; margin-bottom: 20px;">Login </h2>
 
     <form method="POST" action="/chauffeur-login">
 
-        <input type="text" name="id_chauffeur" placeholder="Votre ID" required>
+        <input type="text" name="id_chauffeur" placeholder="ID Chauffeur (ex: CH001)" required>
 
-        <input type="password" name="password" placeholder="Code" required>
+        <input type="password" name="password" placeholder="Mot de passe" required>
 
         <button type="submit">Connexion</button>
 
     </form>
-
-    <p style="text-align:center; margin-top:10px;">
-        <a href="/">← Retour </a>
-    </p>
 
 </div>
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modifier réservation</title>
+</head>
+<body>
+
+<h2>Modifier réservation #{{ reservation[0] }}</h2>
+
+<form method="POST" action="/reservation/update_reservation/{{ reservation[0] }}">
+
+    <input type="text" name="nom"       value="{{ reservation[9] }}"  required>
+    <input type="text" name="telephone" value="{{ reservation[11] }}" required>
+    <input type="text" name="ligne"     value="{{ reservation[6] }}"  required>
+    <input type="text" name="arret"     value="{{ reservation[7] }}"  required>
+    <input type="time" name="horaire"   value="{{ reservation[8] }}"  required>
+    <input type="number" name="places"  value="{{ reservation[10] }}" required>
+
+    <select name="paiement">
+        <option {% if reservation[12]=='Espèces' %}selected{% endif %}>Espèces</option>
+        <option {% if reservation[12]=='Mobile'  %}selected{% endif %}>Mobile</option>
+        <option {% if reservation[12]=='Carte'   %}selected{% endif %}>Carte</option>
+    </select>
+
+    <select name="statut">
+        <option {% if reservation[5]== 'En attente' %}selected{% endif %}>En attente</option>
+        <option {% if reservation[5]=='Confirmée'  %}selected{% endif %}>Confirmée</option>
+        <option {% if reservation[5]=='Annulée'    %}selected{% endif %}>Annulée</option>
+    </select>
+
+    <button type="submit">💾 Enregistrer</button>
+
+</form>
+
+</body>
+</html>

@@ -1,41 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Driver</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taphhébia Bus — Chauffeur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/driver_dashboard.css') }}">
 </head>
-
 <body>
 
-<div class="header">Dashboard Chauffeur</div>
+<header>
+  <div class="logo">Transport <span></span></div>
+  <div class="logo-sub">Ligne principale · Nouakchott (Chauffeur)</div>
+  <div style="margin-top: 10px;">
+      <a href="/logout" style="color: green;  font-weight: bold;">Logout </a>
+  </div>
+</header>
 
-<div class="card">
-    <h3>Itinéraire</h3>
+<div class="page">
 
-    <div class="stop">
-        <span>Ancien Aéroport</span>
-        <button class="btn">Valider</button>
+  <!-- =============================== -->
+  <!-- NOUVEAU: ETAT DU BUS            -->
+  <!-- =============================== -->
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">⚙️</span> État du Véhicule</div>
+    <form action="/driver/update_bus" method="POST" style="margin-top: 10px;">
+        <div style="margin-bottom: 12px;">
+            <div class="tarif-lbl" style="margin-bottom: 5px; color: var(--mut); font-weight: 700;">Sélectionnez votre bus</div>
+            <div class="inp-wrap" style="margin-bottom: 0;">
+                <select name="id_bus" class="inp-tel" required style="font-family: var(--ff); cursor: pointer; color: var(--txt); width: 100%;">
+                    <option value="" disabled selected>-- Choisir le véhicule --</option>
+                    {% for b in buses %}
+                    <option value="{{ b[0] }}">{{ b[1] }} ({{ b[3] }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <div class="tarif-lbl" style="margin-bottom: 5px; color: var(--mut); font-weight: 700;">Signaler un statut</div>
+            <div class="inp-wrap" style="margin-bottom: 0;">
+                <select name="status" class="inp-tel" required style="font-family: var(--ff); cursor: pointer; color: var(--txt); width: 100%;">
+                    <option value="" disabled selected>-- Choisir un statut --</option>
+                    <option value="En service">✅ En service</option>
+                    <option value="En panne">🚨 En panne</option>
+                    <option value="Maintenance">🔧 Maintenance</option>
+                </select>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn-res">Valider l'état du bus</button>
+    </form>
+  </div>
+
+
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">1</span> Direction</div>
+    <div class="two-col">
+      <div class="choice-btn on" id="d-a" onclick="setDir('aller')">
+        <span class="cb-name">Aller</span>
+        <span class="cb-sub">Carrefour vers Université</span>
+      </div>
+      <div class="choice-btn" id="d-r" onclick="setDir('retour')">
+        <span class="cb-name">Retour</span>
+        <span class="cb-sub">Université vers Carrefour</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">2</span> Heure de départ</div>
+    <div class="hor-grid" id="hor-grid"></div>
+  </div>
+
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">3</span> Votre trajet</div>
+    <div class="stops-col" id="stops-col"></div>
+    <p class="stop-hint" id="stop-hint">Appuyez sur votre arrêt de départ</p>
+    <div class="dur-row" id="dur-row">
+      <span class="dur-lbl">Durée estimée</span>
+      <span class="dur-val" id="dur-val">—</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">4</span> Nombre de places</div>
+    <div class="places-row">
+      <span class="places-lbl">Places à réserver</span>
+      <div class="places-ctrl">
+        <button class="pctrl-btn" onclick="changePlaces(-1)">−</button>
+        <span class="places-num" id="places-num">1</span>
+        <button class="pctrl-btn" onclick="changePlaces(1)">+</button>
+      </div>
+    </div>
+    <div class="tarif-fix">
+      <div>
+        <div class="tarif-lbl">Prix par place</div>
+        <div class="tarif-detail" id="tarif-detail">1 place × 20 MRU</div>
+      </div>
+      <div class="tarif-total" id="tarif-total">20 MRU</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clabel"><span class="clabel-num">5</span> Paiement</div>
+    <div class="pay-hint">
+      Si un passager se présente sans réservation, vous pouvez l'ajouter ici.
+      Sélectionnez le mode de paiement ci-dessous.
+    </div>
+    <div class="pay-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="pbtn on" id="pm-especes" onclick="setPay('Espèces')">
+        <span class="pbtn-name"> Espèces</span>
+        <span class="pbtn-sub">Paiement à bord</span>
+      </div>
+      <div class="pbtn" id="pm-mobile" onclick="setPay('Mobile')">
+        <span class="pbtn-name"> Mobile</span>
+        <span class="pbtn-sub">Bankily / Sedad...</span>
+      </div>
+    </div>
+    <div class="inp-wrap" style="margin-bottom: 10px;">
+      <input class="inp-tel" type="text" id="nom_client" maxlength="50"
+             placeholder="Prénom et nom du client" style="width:100%; border:none; outline:none; padding-left:15px; background: transparent; font-family:'Nunito',sans-serif; color:#333; font-weight:600;">
+    </div>
+    <div class="inp-wrap">
+      <span class="inp-flag">MR</span>
+      <span class="inp-pre">+222</span>
+      <input class="inp-tel" type="tel" id="phone" maxlength="11"
+             placeholder="XX XX XX XX" oninput="fmtTel(this)">
     </div>
 
-    <div class="stop">
-        <span>Carrefour Madrid</span>
-        <button class="btn">Valider</button>
-    </div>
+    <button class="btn-res" onclick="reserver()">Confirmer la réservation</button>
+  </div>
 
-    <div class="stop">
-        <span>Université</span>
-        <button class="btn">Valider</button>
+  <!-- =============================== -->
+  <!-- NOUVEAU: FEUILLE DE ROUTE       -->
+  <!-- =============================== -->
+  <div class="card" style="margin-top: 25px;">
+    <div class="clabel"><span class="clabel-num" style="background: #1dd1a1;">📋</span> Feuille de Route - Passagers</div>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+      {% for r in reservations %}
+      <div style="background: #f8f9fa; border: 1px solid #eef2f7; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="color: #0f4c75; font-size: 1.1em;">{{ r[9] }}</strong>
+          <span style="font-weight:bold; color: #1dd1a1; background: rgba(29,209,161,0.1); padding: 4px 8px; border-radius: 6px;">{{ r[10] }} Place(s)</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; color: #666; font-size: 0.9em;">
+          <span>🕒 {{ r[8] }}</span> | 
+          <span>📞 {{ r[11] }}</span>
+        </div>
+        <div style="color: #444; font-size: 0.85em; font-style: italic;">
+          📍 {{ r[7] }}
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85em;">
+          <span style="background: #e0e0e0; padding: 4px 8px; border-radius: 4px;">Paiement: {{ r[12] }}</span>
+          <span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-weight: bold;">{{ r[5] }}</span>
+        </div>
+      </div>
+      {% else %}
+      <p style="text-align: center; color: #888; font-style: italic;">Aucun passager prévu pour aujourd'hui.</p>
+      {% endfor %}
     </div>
+  </div>
+
 </div>
 
-<div class="card">
-    <h3>Signaler un problème</h3>
-
-    <button class="btn-danger">Panne</button>
-    <button class="btn-danger">Embouteillage</button>
-    <button class="btn-danger">Accident</button>
+<div id="ov">
+  <div class="cbox">
+    <div class="c-ti">Reservation confirmee</div>
+    <p class="c-sub">Votre place est reservee. Un SMS vous sera envoye.</p>
+    <div class="c-rows" id="c-rows"></div>
+    <button class="btn-ok" onclick="reset()">Nouvelle reservation</button>
+  </div>
 </div>
 
+<script src="{{ url_for('static', filename='js/driver_dashboard.js') }}"></script>
 </body>
 </html>

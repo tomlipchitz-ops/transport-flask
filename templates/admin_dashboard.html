@@ -1,91 +1,708 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Tableau de bord Admin</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
-<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}" defer></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FleetAdmin — Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
 
-<div class="container">
+  <!-- SIDEBAR -->
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <h2>LOGO</h2>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-car-side"></i></div>
+      <span class="brand-name">Admin</span>
+    </div>
 
-        <ul>
-            <li class="active">Tableau de bord</li>
-            <li>Utilisateurs</li>
-            <li>Bus</li>
-            <li>Réservations</li>
-            <li>Paramètres</li>
-        </ul>
+    <nav class="sidebar-nav">
+  <a href="#" class="nav-link active" data-section="dashboard">
+    <i class="fa-solid fa-gauge-high"></i>
+    <span>Dashboard</span>
+  </a>
+  <a href="#" class="nav-link" data-section="chauffeurs">
+    <i class="fa-solid fa-id-card"></i>
+    <span>Chauffeurs</span>
+  </a>
+  <a href="#" class="nav-link" data-section="reservations">
+    <i class="fa-solid fa-calendar-check"></i>
+    <span>Réservations</span>
+  </a>
+  <a href="#" class="nav-link" data-section="vehicles">
+    <i class="fa-solid fa-bus"></i>
+    <span>Véhicules</span>
+  </a>
+  <a href="#" class="nav-link" data-section="reports">
+    <i class="fa-solid fa-chart-line"></i>
+    <span>Rapports</span>
+  </a>
+</nav>
 
-        <a href="/logout" class="logout">Déconnexion</a>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main">
-
-        <!-- TOPBAR -->
-        <div class="topbar">
-            <input type="text" placeholder="Rechercher...">
-            <div class="profile">Admin</div>
-        </div>
-
-        <!-- CARTES -->
-        <div class="cards">
-
-            <div class="card">
-                <h3>Clients</h3>
-                <p data-value="36159">0</p>
-            </div>
-
-            <div class="card">
-                <h3>Réservations</h3>
-                <p data-value="3159">0</p>
-            </div>
-
-            <div class="card highlight">
-                <h3>Revenus</h3>
-                <p data-value="6159">0</p>
-            </div>
-
-        </div>
-
-        <!-- CONTENU -->
-        <div class="content">
-
-            <div class="chart">
-                <h3>Statistiques</h3>
-                <canvas id="chart"></canvas>
-            </div>
-
-            <div class="right">
-
-                <div class="box">
-                    <h3>Ventes</h3>
-                    <p>95K</p>
-                </div>
-
-                <div class="box">
-                    <h3>Trafic</h3>
-                    <p>45%</p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
+<div class="sidebar-footer">
+  <div class="admin-avatar">A</div>
+  <div class="admin-info">
+    <span class="admin-name">Administrateur</span>
+    <span class="admin-role">Super Admin</span>
+  </div>
+  <a href="/logout" class="logout-btn" title="Déconnexion">
+    <i class="fa-solid fa-right-from-bracket"></i>
+  </a>
 </div>
+  </aside>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- MAIN -->
 
+  <main class="main-content" id="mainContent">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="menu-toggle" id="menuToggle">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="page-title" id="pageTitle">Dashboard</div>
+  </div>
+  <div class="topbar-right">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Rechercher..." id="searchInput"/>
+    </div>
+  </div>
+</header>
+
+<!-- ===== SECTION: DASHBOARD ===== -->
+<section class="section active" id="section-dashboard">
+
+  <div class="section-header">
+    <h2>Vue d'ensemble</h2>
+    <span class="subtitle">Bienvenue sur votre panneau de gestion</span>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card" style="--delay:0s">
+      <div class="stat-icon"><i class="fa-solid fa-id-card"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">{{ chauffeurs|length }}</div>
+        <div class="stat-label">Chauffeurs</div>
+      </div>
+      <div class="stat-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +2 ce mois</div>
+    </div>
+    <div class="stat-card" style="--delay:.1s">
+      <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">{{ reservations|length }}</div>
+        <div class="stat-label">Réservations</div>
+      </div>
+      <div class="stat-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +18 ce mois</div>
+    </div>
+    <div class="stat-card" style="--delay:.2s">
+      <div class="stat-icon"><i class="fa-solid fa-bus"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">{{ buses|length }}</div>
+        <div class="stat-label">Véhicules</div>
+      </div>
+      <div class="stat-trend neutral"><i class="fa-solid fa-minus"></i> Stable</div>
+    </div>
+    <div class="stat-card" style="--delay:.3s">
+      <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
+      <div class="stat-body">
+        <div class="stat-value" style="display:flex; align-items:baseline; gap:6px;">
+            {{ revenus }} 
+            <span style="font-size: 0.45em; font-weight: 600; color: #1dd1a1; font-family: 'DM Sans', sans-serif; letter-spacing: 1px; text-transform: uppercase;">MRU</span>
+        </div>
+        <div class="stat-label">Revenus</div>
+      </div>
+      <div class="stat-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +12%</div>
+    </div>
+  </div>
+
+
+  </div>
+
+  <!-- RECENT RESERVATIONS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Réservations récentes</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <th>Ligne</th>
+            <th>Arrêt</th>
+            <th>Horaire</th>
+            <th>Places</th>
+            <th>Paiement</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reservationBody">
+  {% for r in reservations %}
+  <tr data-id="{{ r[0] }}" data-status="{{ r[5] }}" data-ligne="{{ r[6] }}">
+    <td>{{ r[0] }}</td>   <!-- id -->
+    <td>{{ r[9] }}</td>   <!-- nom -->
+    <td>{{ r[11] }}</td>  <!-- telephone -->
+    <td>{{ r[6] }}</td>   <!-- ligne -->
+    <td>{{ r[7] }}</td>   <!-- arret -->
+    <td>{{ r[8] }}</td>   <!-- horaire -->
+    <td>{{ r[10] }}</td>  <!-- places -->
+    <td>{{ r[12] }}</td>  <!-- paiement -->
+    <td>
+      <span class="badge
+        {% if r[5] == 'Confirmée' %}confirmed
+        {% elif r[5] == 'En attente' %}pending
+        {% else %}cancelled{% endif %}">
+        {{ r[5] }}
+      </span>
+    </td>
+    <td class="actions-cell" style="display: flex; gap: 0.5rem; justify-content: center;">
+      <button onclick="editReservationModal(`{{ r[0] }}`, `{{ r[9] }}`, `{{ r[11] }}`, `{{ r[6] }}`, `{{ r[7] }}`, `{{ r[8] }}`, `{{ r[10] }}`, `{{ r[12] }}`, `{{ r[5] }}`)" class="icon-btn edit" title="Modifier" style="color: white; background: rgba(29, 209, 161, 0.2); border: 1px solid rgba(29, 209, 161, 0.4);">
+        <i class="fa-solid fa-pen"></i>
+      </button>
+      <a href="/reservation/delete_reservation/{{ r[0] }}" class="icon-btn delete" title="Supprimer" onclick="return confirm('Supprimer cette réservation ?')">
+        <i class="fa-solid fa-trash"></i>
+      </a>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="10" style="text-align:center;padding:24px;color:#6b8aaa">
+    <i class="fa-solid fa-inbox" style="display:block;font-size:1.5rem;margin-bottom:6px"></i>
+    Aucune réservation
+  </td></tr>
+  {% endfor %}
+</tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== SECTION: CHAUFFEURS ===== -->
+<section class="section" id="section-chauffeurs">
+
+  <div class="section-header">
+    <h2>Gestion des Chauffeurs</h2>
+    <button class="btn-primary" onclick="openModal('modal-add-chauffeur')">
+      <i class="fa-solid fa-plus"></i> Ajouter
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Liste des chauffeurs</h3>
+      <div class="card-tools">
+        <input type="text" placeholder="Filtrer..." class="filter-input" id="filterChauffeurs"/>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="tableChauffeurs">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Téléphone</th>
+            <th>N° Permis</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="chauffeurBody">
+          {% for c in chauffeurs %}
+          <tr data-id="{{ c[0] }}">
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] if c[3] else '—' }}</td>
+            <td>{{ c[4] if c[4] else '—' }}</td>
+            <td><span class="badge confirmed">Actif</span></td>
+            <td class="actions-cell">
+              <button class="icon-btn edit" onclick="editChauffeur('{{ c[0] }}')">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <a href="/delete_chauffeur/{{ c[0] }}" class="icon-btn delete" onclick="return confirm('Voulez-vous vraiment supprimer ce chauffeur ?')">
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="7" style="text-align:center;color:#6b8aaa;">Aucun chauffeur trouvé</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== SECTION: RESERVATIONS ===== -->
+<section class="section" id="section-reservations">
+
+  <div class="section-header">
+    <h2>Gestion des Réservations</h2>
+    <button class="btn-primary" onclick="openModal('modal-add-reservation')">
+      <i class="fa-solid fa-plus"></i> Nouvelle
+    </button>
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" id="filterStatus">
+      <option value="">Tous les statuts</option>
+      <option value="confirmed">Confirmées</option>
+      <option value="pending">En attente</option>
+      <option value="cancelled">Annulées</option>
+    </select>
+    <select class="filter-select" id="filterLigne">
+      <option value="">Toutes les lignes</option>
+      <option value="L1">Ligne 1</option>
+      <option value="L2">Ligne 2</option>
+      <option value="L3">Ligne 3</option>
+      <option value="L4">Ligne 4</option>
+    </select>
+    <button class="btn-ghost" onclick="filterReservations()"><i class="fa-solid fa-filter"></i> Filtrer</button>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table" id="tableReservations">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <th>Ligne</th>
+            <th>Arrêt</th>
+            <th>Horaire</th>
+            <th>Places</th>
+            <th>Paiement</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== SECTION: VEHICLES ===== -->
+<section class="section" id="section-vehicles">
+  <div class="section-header">
+    <h2>Véhicules</h2>
+    <button class="btn-primary" style="display:inline-flex; align-items:center; gap:8px;" onclick="openModal('modal-add-bus')"><i class="fa-solid fa-plus"></i> Ajouter</button>
+  </div>
+  <div class="vehicles-grid">
+    {% for b in buses %}
+    <div class="vehicle-card" style="position: relative;">
+      <div class="vehicle-icon"><i class="fa-solid fa-bus"></i></div>
+      <div class="vehicle-info">
+        <div class="vehicle-id">{{ b[1] }}</div>
+        <div class="vehicle-line">Capacité: {{ b[2] }} places</div>
+        <div class="vehicle-line" style="font-size: 0.8rem; color:#0f4c75; margin-top:2px;">Chauffeur assigné: <strong>{{ b[5] if b[5] else 'Aucun' }}</strong></div>
+      </div>
+      <span class="badge {% if b[3] == 'En service' %}confirmed{% elif b[3] == 'Maintenance' or b[3] == 'En panne' %}pending{% else %}cancelled{% endif %}">{{ b[3] }}</span>
+      
+      <!-- Actions au sein de la carte -->
+      <div class="vehicle-actions" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px;">
+        <button class="icon-btn edit" title="Modifier" style="background: rgba(29, 209, 161, 0.2); border: 1px solid rgba(29, 209, 161, 0.4); color: white; cursor: pointer;" onclick="editBusModal('{{ b[0] }}', '{{ b[1] }}', '{{ b[2] }}', '{{ b[3] }}', '{{ b[5] or '' }}')">
+          <i class="fa-solid fa-pen" style="font-size:12px;"></i>
+        </button>
+        <a href="/bus/delete_bus/{{ b[0] }}" class="icon-btn delete" title="Supprimer" onclick="return confirm('Voulez-vous supprimer ce bus ?')">
+          <i class="fa-solid fa-trash" style="font-size:12px;"></i>
+        </a>
+      </div>
+    </div>
+    {% else %}
+    <p style="text-align:center; color: #6b8aaa; width: 100%; padding: 2rem;">Aucun véhicule trouvé</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ===== SECTION: REPORTS ===== -->
+<section class="section" id="section-reports">
+  <div class="section-header">
+    <h2>Rapports</h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card" style="--delay:0s">
+      <div class="stat-icon"><i class="fa-solid fa-check-circle"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">
+            {% set conf = namespace(value=0) %}
+            {% for r in reservations %}{% if r[5] == 'Confirmée' %}{% set conf.value = conf.value + 1 %}{% endif %}{% endfor %}
+            {{ conf.value }}
+        </div>
+        <div class="stat-label">Confirmées</div>
+      </div>
+      <div class="stat-trend up">En ordre</div>
+    </div>
+    <div class="stat-card" style="--delay:.1s">
+      <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">
+            {% set att = namespace(value=0) %}
+            {% for r in reservations %}{% if r[5] == 'En attente' %}{% set att.value = att.value + 1 %}{% endif %}{% endfor %}
+            {{ att.value }}
+        </div>
+        <div class="stat-label">En attente</div>
+      </div>
+      <div class="stat-trend neutral">À valider</div>
+    </div>
+    <div class="stat-card" style="--delay:.2s">
+      <div class="stat-icon"><i class="fa-solid fa-xmark-circle"></i></div>
+      <div class="stat-body">
+        <div class="stat-value">
+            {% set ann= namespace(value=0) %}
+            {% for r in reservations %}{% if r[5] == 'Annulée' %}{% set ann.value = ann.value + 1 %}{% endif %}{% endfor %}
+            {{ ann.value }}
+        </div>
+        <div class="stat-label">Annulées</div>
+      </div>
+      <div class="stat-trend down">Terminées</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Activité hebdomadaire</h3></div>
+    <div class="chart-container">
+      <canvas id="activityChart"></canvas>
+    </div>
+  </div>
+</section>
+  </main>
+
+  <!-- ===== MODAL: ADD CHAUFFEUR ===== -->
+
+  <div class="modal-overlay" id="modal-add-chauffeur">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-plus"></i> Ajouter un Chauffeur</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-chauffeur')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formAddChauffeur" method="POST" action="/add_chauffeur">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ID Chauffeur</label>
+              <input type="text" name="id_chauffeur" placeholder="CH005" required/>
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="text" name="telephone" placeholder="32xxxxxx"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" name="nom" placeholder="Nom" required/>
+            </div>
+            <div class="form-group">
+              <label>Prénom</label>
+              <input type="text" name="prenom" placeholder="Prénom" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" name="password" placeholder="••••••••" required/>
+          </div>
+          <div class="form-group">
+            <label>N° Permis</label>
+            <input type="text" name="num_permis" placeholder="Numéro de permis"/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" type="button" onclick="closeModal('modal-add-chauffeur')">Annuler</button>
+        <button class="btn-primary" type="submit" form="formAddChauffeur">
+          <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: ADD RESERVATION ===== -->
+
+  <div class="modal-overlay" id="modal-add-reservation">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calendar-plus"></i> Nouvelle Réservation</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-reservation')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form id="formAddReservation" method="POST" action="/reservation/add_reservation">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" name="nom" placeholder="Nom du client" required/>
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="text" name="telephone" placeholder="Téléphone" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ligne</label>
+              <select name="ligne">
+                <option value="L1">Ligne 1</option>
+                <option value="L2">Ligne 2</option>
+                <option value="L3">Ligne 3</option>
+                <option value="L4">Ligne 4</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Arrêt</label>
+              <input type="text" name="arret" placeholder="Arrêt" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Horaire</label>
+              <input type="time" name="horaire" required/>
+            </div>
+            <div class="form-group">
+              <label>Places</label>
+              <input type="number" name="places" min="1" max="10" value="1"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Paiement</label>
+            <select name="paiement">
+              <option value="Espèces">Espèces</option>
+              <option value="Mobile">Mobile Money</option>
+              <option value="Carte">Carte bancaire</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('modal-add-reservation')">Annuler</button>
+       <button class="btn-primary" type="submit" form="formAddReservation">
+    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: ADD BUS ===== -->
+  <div class="modal-overlay" id="modal-add-bus">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-bus"></i> Ajouter un Véhicule</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-bus')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formAddBus" method="POST" action="/bus/add_bus">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Immatriculation</label>
+              <input type="text" name="immatriculation" placeholder="e.g. 1234-A-01" required/>
+            </div>
+            <div class="form-group">
+              <label>Capacité</label>
+              <input type="number" name="capacite" placeholder="Places" required/>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Chauffeur assigné (optionnel)</label>
+            <select name="id_chauffeur">
+              <option value="">-- Aucun --</option>
+              {% for c in chauffeurs %}
+              <option value="{{ c[0] }}">{{ c[1] }} {{ c[2] }} ({{ c[0] }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select name="status">
+              <option value="En service">En service</option>
+              <option value="En panne">En panne</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('modal-add-bus')">Annuler</button>
+        <button class="btn-primary" type="submit" form="formAddBus">
+          <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: EDIT BUS ===== -->
+  <div class="modal-overlay" id="modal-edit-bus">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen"></i> Modifier le Véhicule</h3>
+        <button class="modal-close" onclick="closeModal('modal-edit-bus')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditBus" method="POST" action="">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Immatriculation</label>
+              <input type="text" name="immatriculation" id="edit-immatriculation" required/>
+            </div>
+            <div class="form-group">
+              <label>Capacité</label>
+              <input type="number" name="capacite" id="edit-capacite" required/>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Chauffeur assigné (optionnel)</label>
+            <select name="id_chauffeur" id="edit-chauffeur">
+              <option value="">-- Aucun --</option>
+              {% for c in chauffeurs %}
+              <option value="{{ c[0] }}">{{ c[1] }} {{ c[2] }} ({{ c[0] }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select name="status" id="edit-status">
+              <option value="En service">En service</option>
+              <option value="En panne">En panne</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('modal-edit-bus')">Annuler</button>
+        <button class="btn-primary" type="submit" form="formEditBus">
+          <i class="fa-solid fa-floppy-disk"></i> Modifier
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: EDIT RESERVATION ===== -->
+  <div class="modal-overlay" id="modal-edit-reservation">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen"></i> Modifier Réservation</h3>
+        <button class="modal-close" onclick="closeModal('modal-edit-reservation')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form id="formEditReservation" method="POST" action="">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" name="nom" id="edit-res-nom" required/>
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="text" name="telephone" id="edit-res-tel" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ligne</label>
+              <input type="text" name="ligne" id="edit-res-ligne" required/>
+            </div>
+            <div class="form-group">
+              <label>Arrêt</label>
+              <input type="text" name="arret" id="edit-res-arret" required/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Horaire</label>
+              <input type="time" name="horaire" id="edit-res-horaire" required/>
+            </div>
+            <div class="form-group">
+              <label>Places</label>
+              <input type="number" name="places" id="edit-res-places" min="1" required/>
+            </div>
+          </div>
+          <div class="form-row">
+             <div class="form-group">
+              <label>Paiement</label>
+              <select name="paiement" id="edit-res-paiement">
+                <option value="Espèces">Espèces</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Carte">Carte</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Statut</label>
+              <select name="statut" id="edit-res-statut">
+                <option value="En attente">En attente</option>
+                <option value="Confirmée">Confirmée</option>
+                <option value="Annulée">Annulée</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeModal('modal-edit-reservation')">Annuler</button>
+        <button class="btn-primary" type="submit" form="formEditReservation">
+          <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+
+  <script>
+    function editBusModal(id, immatriculation, capacite, status, id_chauffeur) {
+      document.getElementById('formEditBus').action = '/bus/update_bus/' + id;
+      document.getElementById('edit-immatriculation').value = immatriculation;
+      document.getElementById('edit-capacite').value = capacite;
+      
+      let sel = document.getElementById('edit-status');
+      for(let i=0; i<sel.options.length; i++) {
+        if(sel.options[i].value === status) { sel.selectedIndex = i; break; }
+      }
+      
+      let cSel = document.getElementById('edit-chauffeur');
+      for(let i=0; i<cSel.options.length; i++) {
+        if(cSel.options[i].value === id_chauffeur) { cSel.selectedIndex = i; break; }
+      }
+      openModal('modal-edit-bus');
+    }
+
+    function editReservationModal(id, nom, tel, ligne, arret, horaire, places, paiement, statut) {
+      document.getElementById('formEditReservation').action = '/reservation/update_reservation/' + id;
+      document.getElementById('edit-res-nom').value = nom;
+      document.getElementById('edit-res-tel').value = tel;
+      document.getElementById('edit-res-ligne').value = ligne;
+      document.getElementById('edit-res-arret').value = arret;
+      document.getElementById('edit-res-horaire').value = horaire;
+      document.getElementById('edit-res-places').value = places;
+      document.getElementById('edit-res-paiement').value = paiement;
+      document.getElementById('edit-res-statut').value = statut;
+      openModal('modal-edit-reservation');
+    }
+  </script>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}" defer></script>
 </body>
 </html>

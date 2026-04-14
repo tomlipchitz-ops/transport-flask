@@ -1,38 +1,119 @@
-<h1>Bus Nouakchott</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Réservations</title>
 
-<form action="/add_reservation" method="POST">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<h3>Choisir une ligne</h3>
+</head>
 
-<select name="ligne">
-    <option>Ligne 1</option>
-    <option>Ligne 2</option>
-</select><br><br>
+<body>
 
-Arrêt:
-<input type="text" name="arret"><br><br>
+<div class="main-content">
 
-Horaire:
-<input type="text" name="horaire"><br><br>
+    <h2>Gestion des Réservations</h2>
 
-Nom complet:
-<input type="text" name="nom"><br><br>
+    <!-- ===== FORM ===== -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Nouvelle réservation</h3>
+        </div>
 
-Nombre de places:
-<input type="number" name="places"><br><br>
+        <div class="modal-body">
+            <form id="formReservation">
 
-<h3>Paiement</h3>
+                <div class="form-row">
+                    <input type="text" name="nom" placeholder="Nom" required>
+                    <input type="text" name="telephone" placeholder="Téléphone" required>
+                </div>
 
-Téléphone:
-<input type="text" name="telephone"><br><br>
+                <div class="form-row">
+                    <select name="ligne">
+                        <option value="L1">Ligne 1</option>
+                        <option value="L2">Ligne 2</option>
+                        <option value="L3">Ligne 3</option>
+                        <option value="L4">Ligne 4</option>
+                    </select>
 
-Méthode:
-<select name="paiement">
-    <option>Bankily</option>
-    <option>Masrivi</option>
-    <option>Sedad</option>
-</select><br><br>
+                    <input type="text" name="arret" placeholder="Arrêt" required>
+                </div>
 
-<button type="submit">Valider paiement</button>
+                <div class="form-row">
+                    <input type="time" name="horaire" required>
+                    <input type="number" name="places" min="1" value="1">
+                </div>
 
-</form>
+                <div class="form-row">
+                    <select name="paiement">
+                        <option value="Espèces">Espèces</option>
+                        <option value="Mobile">Mobile</option>
+                        <option value="Carte">Carte</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Ajouter</button>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Liste des réservations</h3>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Téléphone</th>
+                        <th>Ligne</th>
+                        <th>Arrêt</th>
+                        <th>Horaire</th>
+                        <th>Places</th>
+                        <th>Paiement</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reservationBody">
+{% for r in reservations %}
+<tr data-id="{{ r.id }}">
+
+    <td>{{ r.id }}</td>
+    <td>{{ r.nom }}</td>
+    <td>{{ r.telephone }}</td>
+    <td>{{ r.ligne }}</td>
+    <td>{{ r.arret }}</td>
+    <td>{{ r.horaire }}</td>
+    <td>{{ r.places }}</td>
+    <td>{{ r.paiement }}</td>
+    <td>{{ r.statut }}</td>
+
+    <td>
+        <button onclick="window.location.href='{{ url_for('reservation.edit_reservation', id=r[0]) }}'">
+  ✏️
+</button><br>
+        <button onclick="deleteReservation({{ r.id }})">🗑️</button>
+    </td>
+
+</tr>
+{% endfor %}
+</tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/reservation.js') }}"></script>
+
+</body>
+</html>

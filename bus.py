@@ -23,15 +23,16 @@ def init_bus(mysql):
         immatriculation = request.form['immatriculation']
         capacite = request.form['capacite']
         status = request.form['status']
+        id_chauffeur = request.form.get('id_chauffeur')
 
         cursor = mysql.connection.cursor()
         cursor.execute(
-            "INSERT INTO bus (immatriculation, capacite, status) VALUES (%s,%s,%s)",
-            (immatriculation, capacite, status)
+            "INSERT INTO bus (immatriculation, capacite, status, id_chauffeur) VALUES (%s,%s,%s,%s)",
+            (immatriculation, capacite, status, id_chauffeur if id_chauffeur else None)
         )
         mysql.connection.commit()
 
-        return redirect(url_for('bus.bus'))
+        return redirect('/admin')
 
     # EDIT PAGE
     @bus_bp.route('/edit_bus/<int:id>')
@@ -47,19 +48,21 @@ def init_bus(mysql):
         immatriculation = request.form['immatriculation']
         capacite = request.form['capacite']
         status = request.form['status']
+        id_chauffeur = request.form.get('id_chauffeur')
 
         cursor = mysql.connection.cursor()
         cursor.execute("""
             UPDATE bus
             SET immatriculation=%s,
                 capacite=%s,
-                status=%s
+                status=%s,
+                id_chauffeur=%s
             WHERE id_bus=%s
-        """, (immatriculation, capacite, status, id))
+        """, (immatriculation, capacite, status, id_chauffeur if id_chauffeur else None, id))
 
         mysql.connection.commit()
 
-        return redirect(url_for('bus.bus'))
+        return redirect('/admin')
 
     # DELETE
     @bus_bp.route('/delete_bus/<int:id>')
@@ -68,4 +71,4 @@ def init_bus(mysql):
         cursor.execute("DELETE FROM bus WHERE id_bus=%s", (id,))
         mysql.connection.commit()
 
-        return redirect(url_for('bus.bus'))
+        return redirect('/admin')
